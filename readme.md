@@ -1,7 +1,7 @@
-#Endpoints
-##/exchangeRates
+<h1>Endpoints</h1>
 
-> returns
+<h3>/exchangeRates</h3>
+returns
 
 ```
 {"exchangeRatePeso": [
