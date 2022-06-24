@@ -3,7 +3,7 @@ const { Router } = require("express");
 const { exchangeRates } = require("./externalRequest");
 router = Router();
 
-router.get("/", (req, res) => {
+router.get("/exchangeRate", (req, res) => {
   exchangeRates((data) => {
     res.json({ exchangeRatePeso: data });
   });
