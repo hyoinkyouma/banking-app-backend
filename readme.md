@@ -4,7 +4,7 @@
 returns
 
 ```
-{"exchangeRatePeso": [
+{"RatePeso": [
 
     {
       "rate": 0.025673,
