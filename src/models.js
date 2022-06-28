@@ -10,10 +10,18 @@ class UserModel {
         accountNumber: String,
         accountType: String,
         accountId: Number,
+        password: String,
       })
     );
   }
-  async makeNewUser({ email, name, balance, accountType, accountNumber }) {
+  async makeNewUser({
+    email,
+    name,
+    balance,
+    accountType,
+    accountNumber,
+    password,
+  }) {
     if (await this.userModel.findOne({ email: email })) {
       return "User already Exists";
     } else {
@@ -24,16 +32,21 @@ class UserModel {
         accountNumber: accountNumber,
         accountType: accountType,
         accountId: await this.userModel.countDocuments(),
+        password: password,
       });
 
       return await newUser.save();
     }
   }
   async findUserById(id) {
-    return this.userModel.findOne({ _id: id });
+    return await this.userModel.findOne({ _id: id });
   }
   async findUserByCreds({ email, password }) {
-    return await this.userModel.findOne({ email: email, password: password });
+    const user = await this.userModel.findOne({ email: email });
+    if (user === {} || user === null) return "Incorrect Email";
+    if (user.password === password) {
+      return user;
+    } else return "Incorrect Password";
   }
   async deposit(id, amount) {
     await this.userModel.findOneAndUpdate(

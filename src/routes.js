@@ -10,26 +10,29 @@ router.get("/exchangeRate", (req, res) => {
     console.log("\x1b[32m", "End Exchange Rate\t\t[Ok]");
     console.log("\x1b[36m%s\x1b[0m", "Result: ");
     console.table(data);
-    console.log("\x1b[32m", "End Route Exchange Rate\t[Ok]");
   });
+  console.log("\x1b[32m", "End Route Exchange Rate\t[Ok]");
 });
 router.get("/newUser", async (req, res) => {
-  const user = userModel.makeNewUser({
-    email: "roman.cabalum@gmail.com",
+  const user = await userModel.makeNewUser({
     name: "Roman Cabalum",
-    balance: 56000,
-    accountType: "Savings Account",
+    email: "roman.cabalum@gmail.com",
+    password: "1234",
+    balance: 62600,
     accountNumber: "3600 4445 9997 8546",
+    accountType: "Savings Account",
+    accountId: 0,
   });
-  console.log(await user);
+  res.json(user);
 });
 
 router.post("/loginUserById", async (req, res) => {
   console.log("Enter /loginUser");
   try {
-    const user = req.id;
-    const userData = await userModel.findUser(user);
-    res.send({ user: userData });
+    const user = req.body.id;
+    const userData = await userModel.findUserById(user);
+    console.log(userData);
+    res.send(userData);
   } catch (e) {
     console.log(e.toString());
     res.send({ Err: e.toString() });
@@ -40,7 +43,9 @@ router.post("/loginUser", async (req, res) => {
   console.log("Enter /loginUser");
   try {
     const user = req.body;
-    res.json(await userModel.findUserByCreds(user));
+    const userData = await userModel.findUserByCreds(user);
+    console.log(userData);
+    res.json(userData);
   } catch (e) {
     console.log(e);
     res.send({ err: e.toString() });
