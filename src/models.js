@@ -29,5 +29,18 @@ class UserModel {
       return await newUser.save();
     }
   }
+  async findUserById(id) {
+    return this.userModel.findOne({ id: id });
+  }
+  async findUserByCreds({ email, password }) {
+    return await this.userModel.findOne({ email: email, password: password });
+  }
+  async deposit(id, amount) {
+    await this.userModel.findOneAndUpdate(
+      { id: id },
+      { $set: { balance: amount } }
+    );
+    return await this.userModel.findOne({ id: id });
+  }
 }
 module.exports = UserModel;

@@ -24,6 +24,43 @@ router.get("/newUser", async (req, res) => {
   console.log(await user);
 });
 
+router.post("/loginUserById", async (req, res) => {
+  console.log("Enter /loginUser");
+  try {
+    const user = req.id;
+    const userData = await userModel.findUser(user);
+    res.send({ user: userData });
+  } catch (e) {
+    console.log(e.toString());
+    res.send({ Err: e.toString() });
+  }
+});
+
+router.post("/loginUser", async (req, res) => {
+  console.log("Enter /loginUser");
+  try {
+    const user = req.body;
+    res.json(await userModel.findUserByCreds(user));
+  } catch (e) {
+    console.log(e);
+    res.send({ err: e.toString() });
+  }
+});
+
+router.post("/deposit", async (req, res) => {
+  console.log("Enter /deposit");
+  try {
+    const newAmount = req.body.amount;
+    const id = req.body.id;
+    console.log(newAmount, id);
+    const result = await userModel.deposit(id, newAmount);
+    res.json(result);
+  } catch (e) {
+    res.send({ Err: e.toString() });
+    console.log(e);
+  }
+});
+
 console.log("\x1b[32m", "Enter initModelsMongoose\t[OK]");
 const userModel = new UserModel();
 module.exports = router;
