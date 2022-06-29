@@ -1,7 +1,9 @@
 const { Router } = require("express");
 const { exchangeRates } = require("./externalRequest");
 router = Router();
+const path = require("path");
 const UserModel = require("./models");
+const e = require("express");
 
 router.get("/exchangeRate", (req, res) => {
   exchangeRates((data) => {
@@ -13,17 +15,41 @@ router.get("/exchangeRate", (req, res) => {
   });
   console.log("\x1b[32m", "End Route Exchange Rate\t[Ok]");
 });
-router.get("/newUser", async (req, res) => {
+// router.get("/newUser", async (req, res) => {
+//   const user = await userModel.makeNewUser({
+//     name: "Roman Cabalum",
+//     email: "roman.cabalum@gmail.com",
+//     password: "1234",
+//     balance: 62600,
+//     accountNumber: "3600 4445 9997 8546",
+//     accountType: "Savings Account",
+//     accountId: 0,
+//   });
+//   res.json(user);
+// });
+
+router.post("/newUser", async (req, res) => {
+  const reqBody = req.body;
   const user = await userModel.makeNewUser({
-    name: "Roman Cabalum",
-    email: "roman.cabalum@gmail.com",
-    password: "1234",
-    balance: 62600,
-    accountNumber: "3600 4445 9997 8546",
-    accountType: "Savings Account",
-    accountId: 0,
+    name: reqBody.name,
+    email: reqBody.email,
+    password: reqBody.password,
+    balance: 2500,
+    accountNumber: reqBody.accountNumber,
+    accountType: reqBody.accountType,
   });
-  res.json(user);
+  console.log("\x1b[32m", "Enter /newUser \t\t[Ok]");
+
+  console.log(user.accountNumber);
+  if (user !== "User already Exists") {
+    res.sendFile(path.join(__dirname, "../public", "sucess.html"));
+  } else {
+    const string = encodeURIComponent("Email already exists");
+    res.redirect("/newUser?Err=" + string);
+  }
+});
+router.get("/newUser", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public", "register.html"));
 });
 
 router.post("/loginUserById", async (req, res) => {

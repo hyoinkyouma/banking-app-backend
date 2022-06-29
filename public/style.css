@@ -1,0 +1,89 @@
+.image-left {
+  height: 100%;
+  width: 100%;
+  object-fit: none;
+  overflow: hidden;
+}
+.header {
+  position: absolute;
+  top: 40%;
+  left: 25%;
+}
+.image-container {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.container-fluid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 100vh;
+  align-items: center;
+  justify-items: center;
+}
+
+.form-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.input-field {
+  margin: 0 !important;
+}
+
+.form {
+  width: 60%;
+}
+.row {
+  margin-bottom: 0 !important;
+}
+
+input,
+select,
+textarea {
+  color: white;
+}
+/* label color */
+.input-field label {
+  color: rgb(255, 255, 255);
+}
+/* label focus color */
+.input-field input[type="text"]:focus + label {
+  color: rgb(255, 255, 255);
+}
+/* label underline focus color */
+.input-field input[type="text"]:focus {
+  border-bottom: 1px solid rgb(255, 255, 255);
+  box-shadow: 0 1px 0 0 rgb(255, 255, 255);
+}
+/* valid color */
+.input-field input[type="text"].valid {
+  border-bottom: 1px solid rgb(16, 139, 0);
+  box-shadow: 0 1px 0 0 rgb(19, 161, 0);
+}
+/* invalid color */
+.input-field input[type="text"].invalid {
+  border-bottom: 1px solid rgb(94, 0, 0);
+  box-shadow: 0 1px 0 0 rgb(94, 0, 0);
+}
+.select-dropdown {
+  color: white;
+}
+#accountNumLabel {
+  color: white;
+}
+#accountNumber {
+  color: white;
+}
+@media only screen and (max-width: 600px) {
+  .container-fluid {
+    grid-template-columns: 1fr;
+    grid-template-rows: 10vh 90vh;
+  }
+  .header {
+    top: -40%;
+    left: 15%;
+  }
+}

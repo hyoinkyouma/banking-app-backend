@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SignUp - BankApp</title>
+    <link href="/materialize/css/materialize.min.css" rel="stylesheet" />
+    <link href="/style.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <div class="container-fluid blue-grey lighten-4">
+      <div class="image-container">
+        <img
+          src="/img/pexels-habib-904735.jpg"
+          class="image-left"
+          alt="banking-image"
+        />
+        <h1 class="header white-text h1">Bank-App</h1>
+      </div>
+      <div class="form card hoverable blue-grey darken-1 white-text">
+        <h2 class="center card-title h1" style="font-size: 4rem">Sign up</h2>
+        <p class="red-text errorMsg center"></p>
+        <div class="card-content" style="margin-bottom: 0; padding-bottom: 0">
+          <form class="col s12 form-inner" action="/newUser" method="post">
+            <div class="row">
+              <div class="input-field col s12">
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  class="validate"
+                  required
+                />
+                <label for="name">Full Name</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  class="validate"
+                  required
+                />
+                <label for="email">Email</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <input
+                  name="password"
+                  id="password"
+                  type="password"
+                  class="validate"
+                  required
+                />
+                <label for="password">Password</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <input
+                  id="accountNumber"
+                  type="text"
+                  name="accountNumber"
+                  readonly="readonly"
+                />
+                <label id="accountNumLabel" for="accountNumber"
+                  >Account Number</label
+                >
+              </div>
+            </div>
+            <div class="row" style="margin-top: 1rem">
+              <div class="input-field col s12">
+                <select name="accountType" required>
+                  <option value="Savings Account">Savings Account</option>
+                  <option value="Checking Account">Checking Account</option>
+                  <option value="Money Market">Money Market</option>
+                </select>
+                <label>Account Type</label>
+              </div>
+            </div>
+            <div class="row center card-action">
+              <button class="btn center wave-effect" type="submit">
+                Submit
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script src="/materialize/js/materialize.min.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var elems = document.querySelectorAll("select");
+        var instances = M.FormSelect.init(elems);
+      });
+      const genAccountNum = () => {
+        const input = document.getElementById("accountNumber");
+        let accStr = "";
+        let x = 0;
+        const genNum = () => {
+          const randomNumber = Math.round(Math.random() * 9);
+          accStr += String(randomNumber);
+          x++;
+          if (x < 16) {
+            genNum();
+          }
+        };
+        genNum();
+        accStr = accStr.replace(/(.{4})/g, "$1-");
+        accStr = accStr.substring(0, 19);
+        input.value = accStr;
+        input.classList.add("active");
+        document.getElementById("accountNumLabel").classList.add("active");
+      };
+      document.getElementById("name").onchange = (e) => {
+        if (e.target.value === "") {
+          document.getElementById("accountNum").value = "";
+          document.getElementById("accountNum").classList.remove("active");
+          document.getElementById("accountNumLabel").classList.remove("active");
+        } else {
+          genAccountNum();
+        }
+      };
+
+      const url = new URL(window.location);
+      const err = url.searchParams.get("Err");
+      document.querySelector(".errorMsg").textContent = err;
+    </script>
+  </body>
+</html>

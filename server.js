@@ -1,9 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
-
 const env = require("dotenv").config();
 const cors = require("cors");
-
+const path = require("path");
 const UserModel = require("./src/models.js");
 
 const app = express();
@@ -25,7 +24,9 @@ const initExpress = () => {
 
     console.log("\x1b[32m", "Enter initRoutes \t\t[OK]");
     app.use(express.json());
+    app.use(express.urlencoded({ extended: true }));
 
+    app.use(express.static(path.join(__dirname, "./public/")));
     app.use(require("./src/routes.js"));
 
     app.listen(process.env.APP_PORT, () => {
