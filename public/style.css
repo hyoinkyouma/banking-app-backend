@@ -86,4 +86,7 @@ textarea {
     top: -40%;
     left: 15%;
   }
+  .form {
+    width: 90%;
+  }
 }
