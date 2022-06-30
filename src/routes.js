@@ -1,9 +1,16 @@
 const { Router } = require("express");
-const { exchangeRates } = require("./externalRequest");
-router = Router();
+const { exchangeRates, fetchNews } = require("./externalRequest");
+const router = Router();
 const path = require("path");
 const UserModel = require("./models");
-const e = require("express");
+const TransModel = require("./transModel");
+const transModel = new TransModel();
+const userModel = new UserModel();
+
+router.get("/news", (req, res) => {
+  console.log("Enter /news \t\t [OK]");
+  fetchNews((data) => res.json(data));
+});
 
 router.get("/exchangeRate", (req, res) => {
   exchangeRates((data) => {
@@ -15,18 +22,6 @@ router.get("/exchangeRate", (req, res) => {
   });
   console.log("\x1b[32m", "End Route Exchange Rate\t[Ok]");
 });
-// router.get("/newUser", async (req, res) => {
-//   const user = await userModel.makeNewUser({
-//     name: "Roman Cabalum",
-//     email: "roman.cabalum@gmail.com",
-//     password: "1234",
-//     balance: 62600,
-//     accountNumber: "3600 4445 9997 8546",
-//     accountType: "Savings Account",
-//     accountId: 0,
-//   });
-//   res.json(user);
-// });
 
 router.post("/newUser", async (req, res) => {
   const reqBody = req.body;
@@ -42,11 +37,14 @@ router.post("/newUser", async (req, res) => {
 
   console.log(user.accountNumber);
   if (user !== "User already Exists") {
-    res.sendFile(path.join(__dirname, "../public", "sucess.html"));
+    res.redirect("/sucess?Acc=" + user._id);
   } else {
     const string = encodeURIComponent("Email already exists");
     res.redirect("/newUser?Err=" + string);
   }
+});
+router.get("/sucess", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public", "sucess.html"));
 });
 router.get("/newUser", (req, res) => {
   res.sendFile(path.join(__dirname, "../public", "register.html"));
@@ -92,6 +90,25 @@ router.post("/deposit", async (req, res) => {
   }
 });
 
-console.log("\x1b[32m", "Enter initModelsMongoose\t[OK]");
-const userModel = new UserModel();
+router.post("/logTransaction", async (req, res) => {
+  console.log("Enter /logTransaction \t\t [OK]");
+  //
+  const { type, amount, userId } = req.body;
+  const newTrans = await transModel.handleNewTransaction(type, amount, userId);
+  //
+  console.log("New Transaction:");
+  console.table(newTrans);
+  //
+  res.json({ status: true, transaction: newTrans });
+});
+
+router.post("/getRecords", async (req, res) => {
+  console.log("Enter /getRecords \t\t [OK]");
+  //
+  const id = req.body.id;
+  const recordArr = await transModel.fetchTransaction(id);
+  console.table(recordArr);
+  res.json({ transactions: recordArr });
+});
+
 module.exports = router;

@@ -44,5 +44,12 @@
       </div>
     </div>
     <script src="./materialize/js/materialize.min.js"></script>
+    <script>
+      const params = new URL(document.location).searchParams;
+      const id = params.get("Acc");
+      setTimeout(() => {
+        window.location.replace(`http://localhost:3000?Acc=${id}`);
+      }, 3000);
+    </script>
   </body>
 </html>

@@ -2,6 +2,19 @@ const fs = require("fs");
 const path = require("path");
 const https = require("https");
 
+const fetchNews = (cb) => {
+  return https.get(
+    "https://saurav.tech/NewsAPI/top-headlines/category/business/us.json",
+    (response) => {
+      let data = "";
+      response.on("data", (chunk) => (data += chunk));
+      response.on("end", () => {
+        const dataJSON = JSON.parse(data);
+        cb(dataJSON);
+      });
+    }
+  );
+};
 const fetchExchangeRates = (cb) => {
   console.log("Enter fetchExchangeRates\t[Ok]");
 
@@ -54,4 +67,4 @@ const exchangeRates = (cb) => {
   });
 };
 
-module.exports = { exchangeRates };
+module.exports = { exchangeRates, fetchNews };
