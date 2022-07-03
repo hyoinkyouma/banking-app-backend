@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+
 class UserModel {
   constructor() {
     this.userModel = mongoose.model(

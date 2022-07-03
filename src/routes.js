@@ -131,4 +131,28 @@ router.post("/findUserAccNum", async (req, res) => {
     console.log("Error:" + e.toString());
   }
 });
+
+router.post("/transfer", async (req, res) => {
+  console.log("Enter /transfer \t\t [OK]");
+  try {
+    const request = req.body;
+    console.log("Response: \n" + request);
+
+    const recUser = await userModel.findUserById(request.recId);
+
+    await userModel.deposit(
+      recUser._id,
+      Number(recUser.balance) + Number(request.amount)
+    );
+
+    const response = await userModel.deposit(
+      request.senderId,
+      request.amountSend
+    );
+    res.json(response);
+  } catch (e) {
+    console.log("Exception /transfer \t\t [Err]");
+    console.log(">" + e.toString());
+  }
+});
 module.exports = router;
