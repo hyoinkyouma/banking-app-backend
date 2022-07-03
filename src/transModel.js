@@ -28,6 +28,10 @@ class TransModel {
     const transactions = await this.transModel.find({ userId: userId });
     return transactions;
   }
+
+  async clearTransactions(id) {
+    return await this.transModel.deleteMany({ userId: id });
+  }
 }
 
 module.exports = TransModel;

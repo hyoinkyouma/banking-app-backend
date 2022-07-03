@@ -55,5 +55,8 @@ class UserModel {
     );
     return await this.userModel.findOne({ _id: id });
   }
+  async findByAccNum(accNum) {
+    return await this.userModel.findOne({ accountNumber: accNum });
+  }
 }
 module.exports = UserModel;

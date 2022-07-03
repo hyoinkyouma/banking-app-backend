@@ -4,6 +4,7 @@ const router = Router();
 const path = require("path");
 const UserModel = require("./models");
 const TransModel = require("./transModel");
+
 const transModel = new TransModel();
 const userModel = new UserModel();
 
@@ -110,5 +111,24 @@ router.post("/getRecords", async (req, res) => {
   console.table(recordArr);
   res.json({ transactions: recordArr });
 });
+router.post("/delRecords", async (req, res) => {
+  console.log("Enter /delRecords \t\t [OK]");
+  const id = req.body.id;
+  console.log("User id: \t\t" + id);
+  await transModel.clearTransactions(id);
 
+  res.json({ transaction: null });
+});
+
+router.post("/findUserAccNum", async (req, res) => {
+  console.log("Enter /findUserAccNum \t\t [OK]");
+  try {
+    const accNum = req.body.id;
+    const response = await userModel.findByAccNum(accNum);
+    console.log(response);
+    res.json(response);
+  } catch (e) {
+    console.log("Error:" + e.toString());
+  }
+});
 module.exports = router;
