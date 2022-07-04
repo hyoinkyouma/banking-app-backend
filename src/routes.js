@@ -4,13 +4,19 @@ const router = Router();
 const path = require("path");
 const UserModel = require("./models");
 const TransModel = require("./transModel");
+const BudgetModel = require("./budgetModel");
 
 const transModel = new TransModel();
 const userModel = new UserModel();
+const budgetModel = new BudgetModel();
 
 router.get("/news", (req, res) => {
-  console.log("Enter /news \t\t [OK]");
-  fetchNews((data) => res.json(data));
+  console.log("\x1b[32m", "Enter /news \t\t\t [OK]");
+  fetchNews((data) => {
+    console.log("\x1b[32m", `News Data: \t\t [${data.status.toUpperCase()}]`);
+    res.json(data);
+  });
+  console.log("\x1b[32m", "End /news \t\t [OK]");
 });
 
 router.get("/exchangeRate", (req, res) => {
@@ -19,7 +25,7 @@ router.get("/exchangeRate", (req, res) => {
     res.json({ RatePeso: data });
     console.log("\x1b[32m", "End Exchange Rate\t\t[Ok]");
     console.log("\x1b[36m%s\x1b[0m", "Result: ");
-    console.table(data);
+    console.log("\x1b[32m", `Exchange Rate Data: \t\t [OK]`);
   });
   console.log("\x1b[32m", "End Route Exchange Rate\t[Ok]");
 });
@@ -60,7 +66,6 @@ router.post("/loginUserById", async (req, res) => {
     res.send(userData);
   } catch (e) {
     console.log(e.toString());
-    res.send({ Err: e.toString() });
   }
 });
 
@@ -108,7 +113,7 @@ router.post("/getRecords", async (req, res) => {
   //
   const id = req.body.id;
   const recordArr = await transModel.fetchTransaction(id);
-  console.table(recordArr);
+  console.log(recordArr);
   res.json({ transactions: recordArr });
 });
 router.post("/delRecords", async (req, res) => {
@@ -154,5 +159,24 @@ router.post("/transfer", async (req, res) => {
     console.log("Exception /transfer \t\t [Err]");
     console.log(">" + e.toString());
   }
+});
+
+router.post("/logBudget", (req, res) => {
+  budgetModel.logBudget(req.body, (data) => {
+    console.log(data);
+    res.json(data);
+  });
+});
+
+router.post("/getBudget", (req, res) => {
+  console.log("Enter /getBudget");
+  budgetModel.fetchBudget(req.body.id, (data) => {
+    console.log(data);
+    res.json({ transactions: data });
+  });
+});
+
+router.get("/", (req, res) => {
+  res.redirect("http://localhost:3000");
 });
 module.exports = router;
