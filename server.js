@@ -3,7 +3,6 @@ const mongoose = require("mongoose");
 const env = require("dotenv").config();
 const cors = require("cors");
 const path = require("path");
-const UserModel = require("./src/models.js");
 
 const app = express();
 
@@ -17,6 +16,8 @@ const initMongo = () => {
   }
 };
 
+const port = process.env.PORT || process.env.APP_PORT;
+
 const initExpress = () => {
   try {
     console.log("\x1b[32m", "Enter initExpress()\t\t[OK]");
@@ -29,7 +30,7 @@ const initExpress = () => {
     app.use(express.static(path.join(__dirname, "./public/")));
     app.use(require("./src/routes.js"));
 
-    app.listen(process.env.APP_PORT, () => {
+    app.listen(port, () => {
       console.log(
         "\x1b[33m",
         `Server listening on port ${process.env.APP_PORT}`

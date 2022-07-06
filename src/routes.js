@@ -168,15 +168,23 @@ router.post("/logBudget", (req, res) => {
   });
 });
 
-router.post("/getBudget", (req, res) => {
+router.post("/getBudget", async (req, res) => {
   console.log("Enter /getBudget");
-  budgetModel.fetchBudget(req.body.id, (data) => {
+  await budgetModel.fetchBudget(req.body.id, (data) => {
     console.log(data);
     res.json({ transactions: data });
   });
 });
 
+router.post("/getBudgetChart", async (req, res) => {
+  console.log("Enter /getBudgetChart");
+  await budgetModel.fetchBudgetChart(req.body.id, (data) => {
+    console.log(data);
+    res.json(data);
+  });
+});
+
 router.get("/", (req, res) => {
-  res.redirect("http://localhost:3000");
+  res.redirect("https://romanaugusto.tk/batch19-fe-activities/banking-app/");
 });
 module.exports = router;
